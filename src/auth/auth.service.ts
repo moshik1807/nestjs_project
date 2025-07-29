@@ -9,7 +9,7 @@ export class AuthService {
         private jwtService:JwtService
     ){}
 
-    async signup(
+    async login(
         username:string,
         password:string
     ):Promise<{token:string}>{
@@ -18,7 +18,10 @@ export class AuthService {
         if(!user){
             throw new UnauthorizedException('Invalid credentials')
         }
-        const payload = {sub:user.id,username:user.username}
+        const payload = {sub:user.id,username:user.username,role:user.role}
         return{token:await this.jwtService.signAsync(payload)}
     }
+
+    
+
 }
