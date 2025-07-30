@@ -19,5 +19,10 @@ export class UsersService {
     const checkPassword = await bcrypt.compare(password,user.password)
     if(checkPassword){ return user}
     else{return null}
-  }  
+  } 
+  
+  async getAllUsers(){
+    return await User.find() 
+  }
+  
 }

@@ -18,7 +18,7 @@ import User from './users/users.entity';
       password: '',
       database: 'nestProject', 
       entities: [User],         
-      synchronize: true,     
+      synchronize: false,     
     }),
     AuthModule,
     UsersModule,

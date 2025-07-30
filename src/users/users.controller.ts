@@ -1,5 +1,6 @@
 import { Controller ,Get,Body, Post} from '@nestjs/common';
 import { UsersService } from './users.service';
+import User from './users.entity';
 
 @Controller('users')
 export class UsersController {
@@ -11,7 +12,7 @@ export class UsersController {
     }
 
     @Get()
-    getall():string{
-        return "usres"
+    async getall():Promise<User[]>{
+        return this.usersService.getAllUsers()
     }
 }
