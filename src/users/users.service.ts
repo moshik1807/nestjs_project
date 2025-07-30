@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt'
+import User from './users.entity';
 
 @Injectable()
 export class UsersService {
-    private users = [
-    { id: 1, username: 'noam', password: '1234', role: 'commander' },
-    { id: 2, username: 'dan', password: 'abcd', role: 'soldier' },
-  ];
-
-  checkUser(username:string,password:string){
-        return this.users.find(user=> user.username == username && user.password == password)
+  async create(body){
+    const hashPassword = await bcrypt.hash(body.password,10)
+    const user = new User()
+    user.username = body.username
+    user.password = hashPassword
+    user.role = body.role
+    return await user.save()
   }
 
-  
+  async checkUser(username:string,password:string){
+    const user = await User.findOne({where:{username}})
+    if(!user) return null
+    const checkPassword = await bcrypt.compare(password,user.password)
+    if(checkPassword){ return user}
+    else{return null}
+  }  
 }
