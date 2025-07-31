@@ -6,14 +6,11 @@ export default class Shift extends BaseEntity{
     id:number
 
     @Column()
-    soldierId:string
-
-    @Column()
     startTime:string
 
     @Column()
     endTime:string
 
     @Column()
-    taskId:string
+    location:string
 }
