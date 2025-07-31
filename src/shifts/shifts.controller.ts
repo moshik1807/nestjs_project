@@ -1,13 +1,10 @@
-import { Controller, Get, Body, Post } from '@nestjs/common';
+import { Controller, Get, Body, Post ,Param} from '@nestjs/common';
 import { ShiftsService } from './shifts.service';
 
 
 @Controller('shifts')
 export class ShiftsController {
     constructor(private readonly shiftsService: ShiftsService) { }
-
-
-
 
     @Post()
     async createShift(@Body() body) {
@@ -19,10 +16,8 @@ export class ShiftsController {
         return await this.shiftsService.getAllShifts();
     }
 
-    @Post('soldierName')
-    async getShiftBySoldierNamePost(@Body('soldierName') soldierName: string) {
-        return await this.shiftsService.getShiftById(soldierName);
+    @Get(':id')
+    async getShiftById(@Param('id') id: string) {
+        return await this.shiftsService.getShiftById(+id);
     }
-
-
 }
