@@ -7,6 +7,8 @@ import { UsersModule } from './users/users.module';
 import { ShiftsModule } from './shifts/shifts.module';
 import { AssignmentsModule } from './assignments/assignments.module';
 import User from './users/users.entity'; 
+import Shift from './shifts/shifts.entity';
+
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import User from './users/users.entity';
       username: 'root',         
       password: '',
       database: 'nestProject', 
-      entities: [User],         
+      entities: [User,Shift],         
       synchronize: false,     
     }),
     AuthModule,
