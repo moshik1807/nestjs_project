@@ -1,98 +1,285 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# מערכת ניהול משמרות ושיבוצים
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## תיאור הפרויקט
+מערכת ניהול משמרות ושיבוצים המיועדת לניהול משמרות חיילים. המערכת מבוססת על NestJS עם TypeORM ו-MySQL, וכוללת מערכת הרשאות מתקדמת.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## טכנולוגיות
+- **Backend**: NestJS
+- **Database**: MySQL
+- **ORM**: TypeORM
+- **Authentication**: JWT
+- **Password Hashing**: bcrypt
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
+## מבנה הפרויקט
+```
+src/
+├── auth/           # מודול אימות והרשאות
+├── users/          # ניהול משתמשים
+├── shifts/         # ניהול משמרות
+├── assignments/    # ניהול שיבוצים
+└── main.ts        # נקודת הכניסה
 ```
 
-## Compile and run the project
+## הרשאות במערכת
+### מפקד (Commander)
+- יצירת משמרות חדשות
+- יצירת שיבוצים חדשים
+- צפייה בכל המשתמשים
+- צפייה בכל השיבוצים
+- צפייה בשיבוצים של חיילים ספציפיים
 
+### חייל (Soldier)
+- צפייה במשמרות
+- צפייה בשיבוצים שלו בלבד
+
+## התקנה והרצה
+
+### דרישות מקדימות
+- Node.js
+- MySQL
+- npm או yarn
+
+### התקנה
 ```bash
-# development
-$ npm run start
+# התקנת תלויות
+npm install
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# הגדרת בסיס נתונים
+# צור בסיס נתונים בשם 'nestProject' ב-MySQL
 ```
 
-## Run tests
-
+### הרצת הפרויקט
 ```bash
-# unit tests
-$ npm run test
+# הרצה במצב פיתוח
+npm run start:dev
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# הרצה במצב production
+npm run start:prod
 ```
 
-## Deployment
+## API Endpoints
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### Authentication
+#### התחברות
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "your_username",
+    "password": "your_password"
+  }'
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+#### בדיקת אימות
+```bash
+curl -X GET http://localhost:3000/auth \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
 
-## Resources
+### Users
+#### הרשמת משתמש חדש
+```bash
+curl -X POST http://localhost:3000/users/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "new_user",
+    "password": "password123",
+    "role": "soldier"
+  }'
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+#### צפייה בכל המשתמשים (רק מפקד)
+```bash
+curl -X GET http://localhost:3000/users \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Shifts
+#### יצירת משמרת חדשה (רק מפקד)
+```bash
+curl -X POST http://localhost:3000/shifts \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "startTime": "08:00",
+    "endTime": "16:00",
+    "location": "Gate A"
+  }'
+```
 
-## Support
+#### צפייה בכל המשמרות
+```bash
+curl -X GET http://localhost:3000/shifts \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### צפייה במשמרת ספציפית
+```bash
+curl -X GET http://localhost:3000/shifts/1 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
 
-## Stay in touch
+### Assignments
+#### יצירת שיבוץ חדש (רק מפקד)
+```bash
+curl -X POST http://localhost:3000/assignments \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "shiftId": 1,
+    "soldierId": 2
+  }'
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#### צפייה בכל השיבוצים (מפקד: הכל, חייל: שלו בלבד)
+```bash
+curl -X GET http://localhost:3000/assignments \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
 
-## License
+#### צפייה בשיבוץ ספציפי
+```bash
+curl -X GET http://localhost:3000/assignments/1 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+#### צפייה בשיבוצים של חייל ספציפי
+```bash
+curl -X GET http://localhost:3000/assignments/soldier/2 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+## דוגמאות שימוש מלאות
+
+### תרחיש 1: הרשמה והתחברות של מפקד
+```bash
+# 1. הרשמת מפקד
+curl -X POST http://localhost:3000/users/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "commander1",
+    "password": "password123",
+    "role": "commander"
+  }'
+
+# 2. התחברות
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "commander1",
+    "password": "password123"
+  }'
+
+# התגובה תכיל טוקן JWT
+```
+
+### תרחיש 2: יצירת משמרת ושיבוץ חייל
+```bash
+# 1. יצירת משמרת (עם טוקן מפקד)
+curl -X POST http://localhost:3000/shifts \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer COMMANDER_JWT_TOKEN" \
+  -d '{
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "location": "Main Gate"
+  }'
+
+# 2. הרשמת חייל
+curl -X POST http://localhost:3000/users/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "soldier1",
+    "password": "password123",
+    "role": "soldier"
+  }'
+
+# 3. שיבוץ החייל למשמרת (עם טוקן מפקד)
+curl -X POST http://localhost:3000/assignments \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer COMMANDER_JWT_TOKEN" \
+  -d '{
+    "shiftId": 1,
+    "soldierId": 2
+  }'
+```
+
+### תרחיש 3: חייל בודק את השיבוצים שלו
+```bash
+# 1. התחברות כחייל
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "soldier1",
+    "password": "password123"
+  }'
+
+# 2. צפייה בשיבוצים (יראה רק את השיבוצים שלו)
+curl -X GET http://localhost:3000/assignments \
+  -H "Authorization: Bearer SOLDIER_JWT_TOKEN"
+```
+
+## בסיס הנתונים
+
+### טבלת Users
+```sql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL
+);
+```
+
+### טבלת Shifts
+```sql
+CREATE TABLE shifts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    startTime VARCHAR(10) NOT NULL,
+    endTime VARCHAR(10) NOT NULL,
+    location VARCHAR(255) NOT NULL
+);
+```
+
+### טבלת Assignments
+```sql
+CREATE TABLE assignments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    shiftId INT NOT NULL,
+    soldierId INT NOT NULL,
+    FOREIGN KEY (shiftId) REFERENCES shifts(id),
+    FOREIGN KEY (soldierId) REFERENCES users(id)
+);
+```
+
+## אבטחה
+- כל הסיסמאות מוצפנות באמצעות bcrypt
+- JWT tokens עם תוקף של שעה
+- הרשאות מבוססות תפקידים (RBAC)
+- הגנה על endpoints רגישים
+
+## שגיאות נפוצות
+- **401 Unauthorized**: טוקן לא תקין או חסר
+- **403 Forbidden**: אין הרשאות מתאימות
+- **404 Not Found**: המשאב לא נמצא
+
+## פיתוח
+```bash
+# הרצת טסטים
+npm run test
+
+# הרצת טסטים עם כיסוי
+npm run test:cov
+
+# בדיקת linting
+npm run lint
+```
+
+## תרומה לפרויקט
+1. צור fork של הפרויקט
+2. צור branch חדש למשימה שלך
+3. בצע commit לשינויים שלך
+4. פתח Pull Request
+
+## רישיון
+MIT License
